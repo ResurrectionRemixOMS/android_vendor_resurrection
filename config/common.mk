@@ -62,6 +62,10 @@ ifneq ($(TARGET_BUILD_VARIANT),user)
 PRODUCT_PROPERTY_OVERRIDES += persist.sys.dun.override=0
 endif
 
+# OMS
+PRODUCT_PROPERTY_OVERRIDES := \
+    ro.substratum.verified=true
+
 ifneq ($(TARGET_BUILD_VARIANT),eng)
 # Enable ADB authentication
 ADDITIONAL_DEFAULT_PROPERTIES += ro.adb.secure=1
@@ -144,13 +148,14 @@ PRODUCT_COPY_FILES += \
 # Include CM audio files
 include vendor/cm/config/cm_audio.mk
 
-# Theme engine
-include vendor/cm/config/themes_common.mk
-
 ifneq ($(TARGET_DISABLE_CMSDK), true)
 # CMSDK
 include vendor/cm/config/cmsdk_common.mk
 endif
+
+# OMS MASQUERADE
+PRODUCT_PACKAGES += \
+    masquerade
 
 # Required CM packages
 PRODUCT_PACKAGES += \
@@ -175,9 +180,7 @@ PRODUCT_PACKAGES += \
 
 # Custom CM packages
 PRODUCT_PACKAGES += \
-    ResurrectionOTA \
     ResurrectionStats \
-    Trebuchet \
     MusicFX \
     CMFileManager \
     Eleven \
@@ -293,9 +296,9 @@ DEVICE_PACKAGE_OVERLAYS += vendor/cm/overlay/common
 
 PRODUCT_VERSION = 5.8.0
 ifneq ($(RR_BUILDTYPE),)
-RR_VERSION := RR-N-v$(PRODUCT_VERSION)-$(shell date -u +%Y%m%d)-$(CM_BUILD)-$(RR_BUILDTYPE)
+RR_VERSION := RR-N-OMS-v$(PRODUCT_VERSION)-$(shell date -u +%Y%m%d)-$(CM_BUILD)-$(RR_BUILDTYPE)
 else
-RR_VERSION := RR-N-v$(PRODUCT_VERSION)-$(shell date -u +%Y%m%d)-$(CM_BUILD)
+RR_VERSION := RR-N-OMS-v$(PRODUCT_VERSION)-$(shell date -u +%Y%m%d)-$(CM_BUILD)
 endif
 
 PRODUCT_PROPERTY_OVERRIDES += \
